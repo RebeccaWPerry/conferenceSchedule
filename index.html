@@ -93,7 +93,7 @@ d3.json("sessions.json", function(error, thisdata){
         var sponsors = [
             {name: 'American Physical Society', s: 'APS', isToggled: false, color: 0},
             {name: 'Committee on Minorities', s: 'COM', isToggled: false, color: 0},
-            {name: 'Committee on the Status of Women in Physics', s: 'CSWP', isToggled: false, color: 0},
+            {name: 'Committee on the Status of Women in Phys.', s: 'CSWP', isToggled: false, color: 0},
             {name: 'Atomic, Molecular & Optical Physics', s: 'DAMOP', isToggled: false, color: 0},
             {name: 'Biological Physics', s: 'DBIO', isToggled: false, color: 0},
             {name: 'Chemical Physics', s: 'DCP', isToggled: false, color: 0},
@@ -116,7 +116,7 @@ d3.json("sessions.json", function(error, thisdata){
             {name: 'Physics of Climate', s: 'GPC', isToggled: false, color: 0},
             {name: 'Quantum Information', s: 'GQI', isToggled: false, color: 0},
             {name: 'Statistical and Nonlinear Physics', s: 'GSNP', isToggled: false, color: 0},
-            {name: 'Shock Compression of Condensed Matter', s: 'GSCCM', isToggled: false, color: 0},
+            {name: 'Shock Compression of Cond. Matter', s: 'GSCCM', isToggled: false, color: 0},
             {name: 'Society of Physics Students', s: 'SPS', isToggled: false, color: 0},
             {name: 'no sponsor', s: 'none', isToggled: false, color: 0},
             {name: 'regular', s: '', isToggled: false, color: 0},
@@ -282,7 +282,7 @@ d3.json("sessions.json", function(error, thisdata){
         ////////////////////////
 
         var numpercol = 11; 
-        var colspacing = 500;
+        var colspacing = 480;
 
         //COLOR BLOCKS FOR SPONSORS
         var key = svg.selectAll("rect.key")
@@ -777,7 +777,8 @@ d3.json("sessions.json", function(error, thisdata){
                                         var kindofsession = ' '}
 
                                     itin[scheduleLoc] = dataset[i].title+
-                                       "</br>Room: "+dataset[i].room+
+                                       "</br>"+
+                                        "<a href = \"http://denverconvention.com/uploads/pdf/Meeting_Room_Level_Map_1.pdf \"target=\"_blank\">"+"Room: " +dataset[i].room+"</a>"+
                                         "</br>Sponsor: "+ dataset[i].sponsor+"</br>"+
                                         "<a href = \"http://meetings.aps.org/Meeting/MAR14/Session/"+dataset[i].code+"\"target=\"_blank\">"+ kindofsession +"Session: " +dataset[i].code+"</a>"
                                     }
@@ -819,7 +820,8 @@ d3.json("sessions.json", function(error, thisdata){
                                         var kindofsession = ' '}
 
                                     itin[scheduleLoc] = dataset[i].title+
-                                       "</br>Room: "+dataset[i].room+
+                                       "</br>"+
+                                        "<a href = \"http://denverconvention.com/uploads/pdf/Meeting_Room_Level_Map_1.pdf \"target=\"_blank\">"+"Room: " +dataset[i].room+"</a>"+
                                         "</br>Sponsor: "+ dataset[i].sponsor+"</br>"+
                                         "<a href = \"http://meetings.aps.org/Meeting/MAR14/Session/"+dataset[i].code+"\"target=\"_blank\">"+ kindofsession +"Session: " +dataset[i].code+"</a>"
                                     }}}
@@ -995,12 +997,12 @@ d3.json("sessions.json", function(error, thisdata){
                     .data([0])
                     .enter()
                 .append("text")
-                .attr("x", 820)
+                .attr("x", 880)
                 .attr("y", r1+340)
                 .attr("fill", "black")
                 .style("font-family", "Open Sans")
                 .style("text.anchor", "left")
-                .style("font-size", "20px")
+                .style("font-size", "18px")
                 .style("cursor", "pointer")
                 .style("pointer-events", "none")
                 .text("*FSB = Four Seasons Ballroom, MHB = Mile High Ballroom") ;
@@ -1071,11 +1073,11 @@ d3.json("sessions.json", function(error, thisdata){
                 d3.select("body")
                      .append("p")
                      .style("text-align", "center") //to center text CSS
-                     .style("width","1374px")
+                     .style("width","1369px")
                     .style("font-size", "12pt")
-                 .style("font-family", "Open Sans")
-                     .style("margin","5px 80px 40px 100px") //CSS style property, top, right, bottom,
-                     .html("@RebeccaWPerry</br>rperry@seas.harvard.edu</br>December 31, 2013");
+                    .style("font-family", "Open Sans")
+                    .style("margin", "10px 0px 20px 100px") //CSS style property, top, right, bottom,
+                    .html("@RebeccaWPerry</br>rperry@seas.harvard.edu</br>December 31, 2013");
 
     })//end json load
         </script>
