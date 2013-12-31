@@ -1,0 +1,35 @@
+This is how I prepped the data for the d3 site:
+*** There were some weird cases that were handled by hand, e.g. misspelled sponsors
+
+in ipython --pylab:
+
+run scrapeSessionInfo.py (slow)
+run scrapeUnitInfo.py (fast)
+run organize.py
+
+output:
+variable: rooms
+sponsor_info_java
+session_info_java
+
+
+copy "rooms" variable into index.html
+copy sponsor_info_java json into index.html
+move session_info_java to sessions.json in the same directory as index.html
+
+
+
+
+
+Details:
+
+scrapeSessinInfo.py
+    -sessions, session code and name
+    -session_info, letter, number, name, sponsors
+    -dumps to session_info.pkl
+
+scrapeUnitInfo.py
+    -creates a list of the long names and abbreviatiosn of the units
+    -dumps info to unit_info.pkl
+
+organize.py
