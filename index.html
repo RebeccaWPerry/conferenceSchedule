@@ -5,9 +5,7 @@
         <meta charset="utf-8">
         <title>Conference Schedule</title>
         <script type="text/javascript" src="d3/d3.v3.js"></script>
-<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono' rel='stylesheet' type='text/css'>
-
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,400italic&subset=latin,cyrillic-ext,greek-ext,greek' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Open+Sans:400,700' rel='stylesheet' type='text/css'>
 
         <style>
             body {
@@ -18,22 +16,42 @@
             @media print
             {
             table {page-break-before:always}
+            body{
+            margin: 0mm 0mm 0mm 0mm;
+            }
             }
         </style>
     </head>
 
         
     <body>
+
         <div id="viz"></div>
         <script type="text/javascript">
 
-        //TODO: what liscence to release it under
+        //Copyright (c) 2013 Rebecca W. Perry
+
+        //Permission is hereby granted, free of charge, to any person obtaining a copy
+        //of this software and associated documentation files (the "Software"), to deal
+        //in the Software without restriction, including without limitation the rights
+        //to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        //copies of the Software, and to permit persons to whom the Software is
+        //furnished to do so, subject to the following conditions:
+
+        //The above copyright notice and this permission notice shall be included in
+        //all copies or substantial portions of the Software.
+
+        //THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        //IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        //FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        //AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        //LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+        //THE SOFTWARE.
+
         //TODO: sort sponsors into general interest and narrow subjects categories?
         //TODO: link to maps?
-        //TODO: printable form?
-
-        //note: for 2013 had to manually change one sponsor name that had a / in it
-        //note: no sessions for NSF even though they are in sponsor list (?)
+        //TODO: improve the printable form?
 
         //page title
         d3.select("body")
@@ -43,7 +61,8 @@
              .style("width","1210px")
              .style("font-size","18pt")
              .style("font-weight", "bold")
-             .text("APS March Meeting 2013: Make your own itinerary");
+             .text("APS March Meeting 2014: Make your own itinerary");
+
 
         //intro text
         d3.select("body")
@@ -53,7 +72,9 @@
              //.style("width","85%")
              .style("max-width","1210px")
              .style("line-height","115%")
-             .html("This is an UNofficial representation of the main sessions from the official meeting schedule <a href = \"http://meetings.aps.org/Meeting/MAR13/sessionindex2\" target=\"_blank\"> available here</a>.  Each of these sessions is either <i>regular</i> with fifteen contributed 10-minute talks, <i>invited</i> with five 30-minute talks, or <i>focus</i> with a mix of invited and contributed talks.  At March Meeting, there are also poster sessions, vendor exhibitions, and special lunchtime and evening sessions not listed here.  </br></br>What are you waiting for?  Create your personalized itinerary through APS March Meeting!</br></br></br> 1. Mouse over a topic to highlight the sessions sponsored by that topical group <FONT style=\"COLOR: white; BACKGROUND-COLOR: rgb(120,120,120)\">(dark gray)</FONT>. </br></br>2. Click a topic to lock or unlock those sessions to the calendar <FONT style=\"COLOR: white; BACKGROUND-COLOR: rgb(31,120,180)\">(blue)</FONT>. </br></br>3. Mouse over a calendar square to get more information on that session. </br></br>4. Click a calendar square to add it to your personal itinerary at the bottom of the page <FONT style=\"COLOR: black; BACKGROUND-COLOR: rgb(178, 255, 255)\">(turquoise)</FONT>.") ;
+             .html("This is an UNofficial,  representation of the main sessions from the official meeting schedule <a href = \"http://meetings.aps.org/Meeting/MAR14/APS_epitome\" target=\"_blank\"> available here</a>.  Each of these sessions is either <i>regular</i> with fifteen contributed 10-minute talks, <i>invited</i> with five 30-minute talks, or <i>focus</i> with a mix of invited and contributed talks.  At March Meeting, there are also poster sessions, vendor exhibitions, and special lunchtime and evening sessions not listed here.  </br></br>What are you waiting for?  Create your personalized itinerary for APS March Meeting!</br></br></br> 1. Mouse over a topic to highlight the sessions sponsored by that topical group <FONT style=\"COLOR: white; BACKGROUND-COLOR: rgb(120,120,120)\">(dark gray)</FONT>. </br></br>2. Click a topic to lock or unlock those sessions to the calendar <FONT style=\"COLOR: white; BACKGROUND-COLOR: rgb(31,120,180)\">(blue)</FONT>. </br></br>3. Mouse over a calendar square to get more information on that session. </br></br>4. Click a calendar square to add it to your personal itinerary at the bottom of the page <FONT style=\"COLOR: black; BACKGROUND-COLOR: rgb(178, 255, 255)\">(turquoise)</FONT>.</br></br>*** print to pdf or paper to save ***") ;
+
+
 
         //main dataset about sessions
         //https://github.com/mbostock/d3/wiki/CSV
@@ -65,11 +86,14 @@ d3.json("sessions.json", function(error, thisdata){
             var dataset = thisdata
 
         //rooms are a simple list of strings, from organize.py, print rooms
-        var rooms = ['301', '302', '303', '307', '308', '309', '310', '314', '315', '316', '317', '318', '319', '320', '321', '322', '323', '324', '325', '326', '327', '328', '329', '336', '337', '338', '339', '340', '341', '342', '343', '344', '345/346', '347', '348', '349', '350', 'Ballroom I', 'Ballroom II', 'Ballroom III', 'Ballroom IV', 'Hilton Baltimore Holiday Ballroom 1', 'Hilton Baltimore Holiday Ballroom 2', 'Hilton Baltimore Holiday Ballroom 3', 'Hilton Baltimore Holiday Ballroom 4', 'Hilton Baltimore Holiday Ballroom 5', 'Hilton Baltimore Holiday Ballroom 6', 'Hilton Baltimore Key Ballroom', 'Key Ballroom 9-10']
+        var rooms = ['102', '103/105', '104', '106', '107', '108', '112/110', '201', '203', '205', '207', '301-303', '304', '401', '402', '403', '404', '405', '406', '407', '501', '502', '503', '504', '505-507', '601', '603', '605', '607', '702', '703', '704', '705/707', '706', '708-712', '709/711', 'FSB', 'FSB 1', 'FSB 4', 'MHB 1A', 'MHB 1A-1B', 'MHB 1B', 'MHB 1C', 'MHB 1D', 'MHB 1E', 'MHB 1F', 'MHB 2A-3A', 'MHB 2B-3B', 'MHB 2C', 'MHB 3C', 'MHB 4A', 'MHB 4B', 'MHB 4C', 'MHB 4D', 'MHB 4E', 'MHB 4F']
+
+
 
         var sponsors = [
             {name: 'American Physical Society', s: 'APS', isToggled: false, color: 0},
             {name: 'Committee on Minorities', s: 'COM', isToggled: false, color: 0},
+            {name: 'Committee on the Status of Women in Physics', s: 'CSWP', isToggled: false, color: 0},
             {name: 'Atomic, Molecular & Optical Physics', s: 'DAMOP', isToggled: false, color: 0},
             {name: 'Biological Physics', s: 'DBIO', isToggled: false, color: 0},
             {name: 'Chemical Physics', s: 'DCP', isToggled: false, color: 0},
@@ -93,7 +117,6 @@ d3.json("sessions.json", function(error, thisdata){
             {name: 'Quantum Information', s: 'GQI', isToggled: false, color: 0},
             {name: 'Statistical and Nonlinear Physics', s: 'GSNP', isToggled: false, color: 0},
             {name: 'Shock Compression of Condensed Matter', s: 'GSCCM', isToggled: false, color: 0},
-            {name: 'National Science Foundation', s: 'NSF', isToggled: false, color: 0},
             {name: 'Society of Physics Students', s: 'SPS', isToggled: false, color: 0},
             {name: 'no sponsor', s: 'none', isToggled: false, color: 0},
             {name: 'regular', s: '', isToggled: false, color: 0},
@@ -161,7 +184,7 @@ d3.json("sessions.json", function(error, thisdata){
 
         var starfontsize = "20px";
 
-        var r1 = 440 //vertical offset
+        var r1 = 430 //vertical offset
 
         //margin around svg
         var margin = {top: 20, right: 10, bottom: 20, left: 100};
@@ -258,8 +281,8 @@ d3.json("sessions.json", function(error, thisdata){
         // Legend
         ////////////////////////
 
-        var numpercol = 13; 
-        var colspacing = 440;
+        var numpercol = 11; 
+        var colspacing = 500;
 
         //COLOR BLOCKS FOR SPONSORS
         var key = svg.selectAll("rect.key")
@@ -394,7 +417,7 @@ d3.json("sessions.json", function(error, thisdata){
             //special star character, legend
             svg.append("text")
                 .attr("x", (d3.round((sponsors.length)/numpercol-.5,0)*colspacing))
-                .attr("y", (sponsors.length-3)%numpercol*25+52-bw/2+9)
+                .attr("y", (sponsors.length-3)%numpercol*25+52-bw/2+21)
                 .style("text.anchor", "left")
                 .style("font-size", starfontsize)
                 .attr("fill", "white")
@@ -410,7 +433,7 @@ d3.json("sessions.json", function(error, thisdata){
                 .attr("r", 5)
                 .attr("x", (d3.round((sponsors.length)/numpercol-.5,0)*colspacing))
                 .attr("cx", (d3.round((sponsors.length-3)/numpercol-.5,0)*colspacing+bw/2))
-                .attr("cy", (sponsors.length)%numpercol*25+42-58+12);
+                .attr("cy", (sponsors.length)%numpercol*25+42-58+25);
 
 
             //reset square
@@ -423,7 +446,7 @@ d3.json("sessions.json", function(error, thisdata){
                 .attr("x", function(){(i = sponsors.length+1)
                     return (d3.round(i/numpercol-.5,0)*colspacing);})
                 .attr("y", function(){i = (sponsors.length+1)
-                    return (i%numpercol*25);})
+                    return (i%numpercol*25+6+25);})
                 .on("mouseenter", function(d){
                         //deal with the hovered sponsor
                         d3.select(this).attr("fill", hovercolor)
@@ -474,7 +497,7 @@ d3.json("sessions.json", function(error, thisdata){
                         return (d3.round(i/numpercol-.5,0)*colspacing+25);
                         })
                     .attr("y", function(){i = sponsors.length+1
-                        return i%numpercol*25+18;
+                        return i%numpercol*25+22+27;
                         })
                     .text("Unselect all")
                 .on("mouseenter", function(d){
@@ -592,6 +615,7 @@ d3.json("sessions.json", function(error, thisdata){
                             {
                             sponsorindex = -1 //set to -1 as warning flag
                             for(var i = 0, len = sponsors.length; i< len; i++) {
+                                //console.log(sponsors[i].s) 
                                 if (sponsors[i].s == eachsponsor[j]) {
                                       sponsorindex = i
                                           break;}
@@ -669,8 +693,10 @@ d3.json("sessions.json", function(error, thisdata){
             .style("z-index", "10")
             .style("font-size", "20px")
             .style("font-family", "Open Sans")
+            .style("font-weight", "bold")
             .style("color","black") //text color
-            .style("background-color",lightgray) //background color
+            .style("background-color", lightgray) //background color
+            .style("opacity", 0.75)
             .style("visibility", "hidden");
 
         squares.attr("x", function(d){ //placement based on room
@@ -753,7 +779,7 @@ d3.json("sessions.json", function(error, thisdata){
                                     itin[scheduleLoc] = dataset[i].title+
                                        "</br>Room: "+dataset[i].room+
                                         "</br>Sponsor: "+ dataset[i].sponsor+"</br>"+
-                                        "<a href = \"http://meetings.aps.org/Meeting/MAR13/Session/"+dataset[i].code+"\"target=\"_blank\">"+ kindofsession +"Session: " +dataset[i].code+"</a>"
+                                        "<a href = \"http://meetings.aps.org/Meeting/MAR14/Session/"+dataset[i].code+"\"target=\"_blank\">"+ kindofsession +"Session: " +dataset[i].code+"</a>"
                                     }
                                  else { //too many selected for one timeslot
                                     d.isToggled = false
@@ -795,7 +821,7 @@ d3.json("sessions.json", function(error, thisdata){
                                     itin[scheduleLoc] = dataset[i].title+
                                        "</br>Room: "+dataset[i].room+
                                         "</br>Sponsor: "+ dataset[i].sponsor+"</br>"+
-                                        "<a href = \"http://meetings.aps.org/Meeting/MAR13/Session/"+dataset[i].code+"\"target=\"_blank\">"+ kindofsession +"Session: " +dataset[i].code+"</a>"
+                                        "<a href = \"http://meetings.aps.org/Meeting/MAR14/Session/"+dataset[i].code+"\"target=\"_blank\">"+ kindofsession +"Session: " +dataset[i].code+"</a>"
                                     }}}
 
                                     refreshCalendarColor()
@@ -838,8 +864,7 @@ d3.json("sessions.json", function(error, thisdata){
                 .attr("fill", "black")
                 .style("cursor", "pointer")
                 //font-family: 'Open Sans';
-                .style("font-family", "oxygen mono")
-
+                .style("font-family","Oxygen Mono")
                 //.style("font-family", "monospace")
                 .text(function(d){return d.d;})
                 .on("click", function(d,i){
@@ -957,13 +982,28 @@ d3.json("sessions.json", function(error, thisdata){
                 .style("text.anchor", "middle")
                 .style("font-size", "20px")
                 .attr("fill", "black")
-             .style("font-family", "Open Sans")
+                .style("font-family", "Open Sans")
                 .style("cursor", "default")
                 .attr("transform", function(d,i){
                     return "translate("+ (22*i+150) +","+(r1-5)+") rotate(-65)";})
                 .text(function(d){
                     return d;});
 
+
+            // warning
+            svg.selectAll("text.aster")
+                    .data([0])
+                    .enter()
+                .append("text")
+                .attr("x", 820)
+                .attr("y", r1+340)
+                .attr("fill", "black")
+                .style("font-family", "Open Sans")
+                .style("text.anchor", "left")
+                .style("font-size", "20px")
+                .style("cursor", "pointer")
+                .style("pointer-events", "none")
+                .text("*FSB = Four Seasons Ballroom, MHB = Mile High Ballroom") ;
 
 
         ///////////////////////////
@@ -976,7 +1016,7 @@ d3.json("sessions.json", function(error, thisdata){
             .attr("class", "itinerary")
             .style("border-collapse", "collapse")
             .style("border", "8px "+medgray+" solid") //outer border
-            .style("width","1209px")
+            .style("width","1369px")
             .style("word-wrap", "break-word")
             .style("height","1000px")
             .style("margin-left", margin.left +"px")
@@ -1031,11 +1071,11 @@ d3.json("sessions.json", function(error, thisdata){
                 d3.select("body")
                      .append("p")
                      .style("text-align", "center") //to center text CSS
-                     .style("width","1334px")
+                     .style("width","1374px")
                     .style("font-size", "12pt")
                  .style("font-family", "Open Sans")
-                     .style("margin","5px 80px 40px 0px") //CSS style property, top, right, bottom,
-                     .html("@RebeccaWPerry</br>rperry@seas.harvard.edu</br>December 13, 2013");
+                     .style("margin","5px 80px 40px 100px") //CSS style property, top, right, bottom,
+                     .html("@RebeccaWPerry</br>rperry@seas.harvard.edu</br>December 31, 2013");
 
     })//end json load
         </script>
