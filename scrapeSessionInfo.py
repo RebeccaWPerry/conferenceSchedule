@@ -6,6 +6,8 @@ import urllib2, csv
 from numpy import zeros
 import pickle
 
+#NOTE--- would have been better to use the page that has all the info rather than
+#opening each subpage: http://meetings.aps.org/Meeting/MAR14/APS_epitome
 
 #currently scraping 2013 meeting info
 downloaded_data  = urllib2.urlopen('http://meetings.aps.org/Meeting/MAR14/sessionindex2')
