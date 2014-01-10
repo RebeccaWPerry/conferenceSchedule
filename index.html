@@ -21,7 +21,20 @@
             }
             }
         </style>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-7468233-3', 'eieie.io');
+          ga('send', 'pageview');
+
+        </script>
+
     </head>
+
 
         
     <body>
@@ -50,8 +63,11 @@
         //THE SOFTWARE.
 
         //TODO: sort sponsors into general interest and narrow subjects categories?
-        //TODO: link to maps?
         //TODO: improve the printable form?
+
+        //TODO: fit to users screen
+        //TODO: get registered with google
+        //TODO: why does text entry look so different in chrome?
 
         //page title
         d3.select("body")
@@ -73,6 +89,8 @@
              .style("max-width","1370px")
              .style("line-height","115%")
              .html("This is an UNofficial,  <a href = \"https://github.com/RebeccaWPerry/conferenceSchedule\" target=\"_blank\"> open source</a>, representation of the main sessions from the official meeting schedule <a href = \"http://meetings.aps.org/Meeting/MAR14/APS_epitome\" target=\"_blank\"> available here</a>.  Each of these sessions is either <i>regular</i> with fifteen contributed 10-minute talks, <i>invited</i> with five 30-minute talks, or <i>focus</i> with a mix of invited and contributed talks.  At March Meeting, there are also poster sessions, vendor exhibitions, and special lunchtime and evening sessions not listed here.  </br></br>What are you waiting for?  Create your personalized itinerary for APS March Meeting!</br></br></br> 1. Mouse over a topic to highlight the sessions sponsored by that topical group <FONT style=\"COLOR: white; BACKGROUND-COLOR: rgb(120,120,120)\">(dark gray)</FONT>. </br></br>2. Click a topic to lock or unlock those sessions to the calendar <FONT style=\"COLOR: white; BACKGROUND-COLOR: rgb(31,120,180)\">(blue)</FONT>. </br></br>3. Mouse over a calendar square to get more information on that session. </br></br>4. Click a calendar square to add it to your personal itinerary at the bottom of the page <FONT style=\"COLOR: black; BACKGROUND-COLOR: rgb(178, 255, 255)\">(turquoise)</FONT>.</br></br>*** save as html or print to pdf/paper to save your itinerary ***") ;
+
+
 
 
 
@@ -121,7 +139,8 @@ d3.json("sessions.json", function(error, thisdata){
             {name: 'no sponsor', s: 'none', isToggled: false, color: 0},
             {name: 'regular', s: '', isToggled: false, color: 0},
             {name: 'invited', s: '', isToggled: false, color: 0},
-            {name: 'focus', s: '', isToggled: false, color: 0}];
+            {name: 'focus', s: '', isToggled: false, color: 0},
+            {name: ' ', s: '', isToggled: false, color: 0}];
 
         var days = [
             {d:"M", isToggled: true},
@@ -228,6 +247,7 @@ d3.json("sessions.json", function(error, thisdata){
                  })
              }
 
+        //refresh the color of the calendar squares
         function refreshCalendarColor(){
                //revise colors of calendar squares
                d3.selectAll(".calendarsquares").attr("fill", function(d){
@@ -247,8 +267,8 @@ d3.json("sessions.json", function(error, thisdata){
                     eachsponsor = (d.sponsor).split(" ")
 
                     for(var j = 0, len = eachsponsor.length; j< eachsponsor.length;j++)                        
-                        {                
-                        sponsorindex = -1 //set to -1 as warning flag TODO
+                        {
+                        sponsorindex = -1 //set to -1 as warning flag
                         for(var i = 0, len = sponsors.length; i< len; i++) {
                             if (sponsors[i].s == eachsponsor[j]) {
                                   sponsorindex = i
@@ -257,24 +277,42 @@ d3.json("sessions.json", function(error, thisdata){
                         if (sponsors[sponsorindex].isToggled){togglescore = togglescore +1;}
                         }
 
-                        //doesn't go away with day toggle, but that's ok, should
+
+                        //TODO implementing search, separated words or phrases by commas
+                        if (sponsors[sponsors.length-1].isToggled){
+                            keywords = document.getElementById('keywords').value
+                            if (keywords.length > 0){
+                                keywords = keywords.toLowerCase()
+                                keywords = keywords.split(",")
+
+                                for(var i = 0; i <keywords.length; i++)
+                                {
+                                    if (d.title.toLowerCase().indexOf(keywords[i].trim()) != -1){
+                                        togglescore = togglescore+1;
+                                    }
+                                }
+                            }
+                        }
+
+
+                        //doesn't go away with day toggle, but that's ok, decided that it should
                         //always show something that has been added to the itinerary
                         if(d.isToggled){
                         return calendared}
 
                         if (days[daysindex].isToggled){
-                                if (togglescore>0){ 
+                                if (togglescore>0){
                                     return color;
                                     }
-                                else{ // if either the day or the sponsor are untoggled
+                                else{ // if unselected
                                     return medgray;
                                     }
                             }
-                         else{ // if either the day or the sponsor are untoggled
+                        else{ // if either the day or the sponsor are untoggled
                             return medgray;
-                             }
+                            }
                     ;} // ends outer function
-                    )//closes att on d3.selectAll
+                    )//closes attr on d3.selectAll
             }
 
         ////////////////////////
@@ -375,6 +413,36 @@ d3.json("sessions.json", function(error, thisdata){
 
                             }
 
+                            //keyword search
+                           if (thisSponsor.name == ' '){
+                                keywords = document.getElementById('keywords').value
+                                if (keywords.length > 0) {
+                                keywords = keywords.toLowerCase()
+                                keywords = keywords.split(",")
+
+                                for(var i = 0; i <keywords.length; i++)
+                                {
+                                    if (d.title.toLowerCase().indexOf(keywords[i].trim()) != -1){
+                                        hoverscore = hoverscore+1;
+                                    }
+                                }}
+                            }
+
+                            //keyword search
+                              if (sponsors[sponsors.length-1].isToggled){
+                                keywords = document.getElementById('keywords').value
+                                if (keywords.length > 0){
+                                keywords = keywords.toLowerCase()
+                                keywords = keywords.split(",")
+
+                                for(var i = 0; i <keywords.length; i++)
+                                {
+                                    if (d.title.toLowerCase().indexOf(keywords[i].trim()) != -1){
+                                        togglescore = togglescore+1;
+                                    }
+                                }}
+                            }
+
 
                             //doesn't go away with day toggle, but that's ok, should
                             //always show something that has been added to the itinerary
@@ -397,12 +465,12 @@ d3.json("sessions.json", function(error, thisdata){
                                  }
 
                         ;} // ends outer function
-                        )//closes att on d3.selectAll
+                        )//closes att d3.selectAll
                     ;}
                     )
 
             .on("mouseout",function(d){
-                    //recolor, but don't effect the toggle state
+                    //recolor, but do not effect the toggle state
                     if(d.isToggled){
                         d3.select(this).attr("fill", color)
                         ;}
@@ -417,7 +485,7 @@ d3.json("sessions.json", function(error, thisdata){
             //special star character, legend
             svg.append("text")
                 .attr("x", (d3.round((sponsors.length)/numpercol-.5,0)*colspacing))
-                .attr("y", (sponsors.length-3)%numpercol*25+52-bw/2+21)
+                .attr("y", (sponsors.length-3)%numpercol*25+48-bw/2)
                 .style("text.anchor", "left")
                 .style("font-size", starfontsize)
                 .attr("fill", "white")
@@ -433,7 +501,102 @@ d3.json("sessions.json", function(error, thisdata){
                 .attr("r", 5)
                 .attr("x", (d3.round((sponsors.length)/numpercol-.5,0)*colspacing))
                 .attr("cx", (d3.round((sponsors.length-3)/numpercol-.5,0)*colspacing+bw/2))
-                .attr("cy", (sponsors.length)%numpercol*25+42-58+25);
+                .attr("cy", (sponsors.length)%numpercol*25-16);
+
+
+            //text entry
+            svg.append("foreignObject")
+                .attr("width", 400)
+                .attr("height", 40)
+                .attr("x", function(){i = sponsors.length
+                    return (d3.round(i/numpercol-.5,0)*colspacing+17);
+                    })
+                .attr("y", function(){i = sponsors.length
+                    return i%numpercol*25-5;
+                    })
+                .append("xhtml:body")
+                .html("<input name='keywords' style='margin: 0; font-size: 18px; padding-top: 2px' type='text' size='28' value='your, comma, separated, keywords' id='keywords'/>");
+
+
+
+            //hover rectangle behind text enter 
+            svg.append("rect")
+                .attr("class", "hoverrect")
+                .attr("fill", "white")
+                .attr("width", bw*12)
+                .attr("opacity",0.0) 
+                .attr("fill-opacity",0.0) 
+                .attr("height", bh*10)
+                .attr("x", function(){(i = sponsors.length)
+                    return (d3.round(i/numpercol-.5,0)*colspacing+135);
+                  })
+                .attr("y", function(){(i = sponsors.length)
+                    return i%numpercol*28-110;
+                    })
+                .on("mouseenter", function(){
+                    refreshCalendarColor()
+                    })
+
+
+                //keyword square, text
+                svg.append("text")
+                    .attr("class", "unselecttext")
+                    .attr("fill", "black")
+                    .attr("font-size","18px")
+                    .attr("font-family", "Open Sans")
+                    .style("cursor", "pointer")
+                    .attr("x", function(){i = sponsors.length+1
+                        return (d3.round(i/numpercol-.5,0)*colspacing+25);
+                        })
+                    .attr("y", function(){i = sponsors.length+1
+                        return i%numpercol*25+22;
+                        })
+                    .text(" ")
+                .on("mouseenter", function(d){
+                        //deal with the hovered sponsor
+                        d3.select(this).attr("fill", hovercolor)
+                        //color matching square
+                        d3.selectAll(".unselectsq").attr("fill", hovercolor)
+                       tooltip.style("background-color", lightgray) //background
+                       tooltip.html("Deselects topics from calendar, but leaves squares added to itinerary.")
+                       return tooltip.style("visibility","visible")
+                            .style("top",(d3.event.pageY-10)+"px")
+                            .style("left",(d3.event.pageX+10)+"px");
+
+                        })
+                .on("mousemove", function(){return tooltip
+                    .style("top",(d3.event.pageY-10)+"px")
+                    .style("left",(d3.event.pageX+10)+"px");})
+
+                .on("mouseout", function(d){
+
+                        //deal with the hovered sponsor
+                        d3.select(this).attr("fill", "black")
+
+                        //color matching square
+                        d3.selectAll(".unselectsq").attr("fill", medgray)
+                        return tooltip.style("visibility", "hidden");})
+
+                .on("click", function(){
+                    for(var i = 0, len = sponsors.length; i< len; i++) 
+                        {
+                        sponsors[i].isToggled = false
+                        }
+
+                    // deal with the hovered sponsor
+                    d3.select(this).attr("fill", "black")
+
+                    //color matching square
+                    d3.selectAll(".unselectsq").attr("fill", medgray)
+
+                    refreshSquareColor()
+                    refreshTextColor()
+                    refreshCalendarColor()}
+                    )
+
+
+
+
 
 
             //reset square
@@ -443,17 +606,20 @@ d3.json("sessions.json", function(error, thisdata){
                 .attr("fill", medgray)
                 .attr("width", bw)
                 .attr("height", bh)
-                .attr("x", function(){(i = sponsors.length+1)
-                    return (d3.round(i/numpercol-.5,0)*colspacing);})
-                .attr("y", function(){i = (sponsors.length+1)
-                    return (i%numpercol*25+6+25);})
+                .attr("x", function(){(i = sponsors.length)
+                    return (d3.round(i/numpercol-.5,0)*colspacing);
+                  })
+                .attr("y", function(){(i = sponsors.length)
+                return i%numpercol*28;
+                })
+
                 .on("mouseenter", function(d){
                         //deal with the hovered sponsor
                         d3.select(this).attr("fill", hovercolor)
                         //color matching square
                         d3.selectAll(".unselecttext").attr("fill", hovercolor)
                        tooltip.style("background-color", lightgray) //background
-                       tooltip.html("Unselects topics from calendar, but leaves squares already added to itinerary.")
+                       tooltip.html("unselects topics from calendar, but leaves squares already added to itinerary")
                        return tooltip.style("visibility","visible")
                             .style("top",(d3.event.pageY-10)+"px")
                             .style("left",(d3.event.pageX+10)+"px");
@@ -493,20 +659,21 @@ d3.json("sessions.json", function(error, thisdata){
                     .attr("font-size","18px")
                     .attr("font-family", "Open Sans")
                     .style("cursor", "pointer")
-                    .attr("x", function(){i = sponsors.length+1
+                    .attr("x", function(){i = sponsors.length
                         return (d3.round(i/numpercol-.5,0)*colspacing+25);
                         })
-                    .attr("y", function(){i = sponsors.length+1
-                        return i%numpercol*25+22+27;
+                    .attr("y", function(){i = sponsors.length+7
+                        return i%numpercol*25+148
+0;
                         })
-                    .text("Unselect all")
+                    .text("unselect all")
                 .on("mouseenter", function(d){
                         //deal with the hovered sponsor
                         d3.select(this).attr("fill", hovercolor)
                         //color matching square
                         d3.selectAll(".unselectsq").attr("fill", hovercolor)
                        tooltip.style("background-color", lightgray) //background
-                       tooltip.html("Deselects topics from calendar, but leaves squares added to itinerary.")
+                       tooltip.html("unselects topics from calendar, but leaves squares already added to itinerary")
                        return tooltip.style("visibility","visible")
                             .style("top",(d3.event.pageY-10)+"px")
                             .style("left",(d3.event.pageX+10)+"px");
@@ -562,7 +729,7 @@ d3.json("sessions.json", function(error, thisdata){
 
                 .text(function(d){
                     if (d.s == ""){
-                        return d.name;} //just name for focus, regular, and invited
+                        return d.name;} //just name for focus, regular, invited, and keyword
                     else{
                         return (d.s +": "+ d.name);} })//division abbreviation too
 
@@ -625,6 +792,21 @@ d3.json("sessions.json", function(error, thisdata){
                                 hoverscore = hoverscore +1 ;}
                             }
 
+                            //TODO implementing search, separated words or phrases by commas
+                              if (sponsors[sponsors.length-1].isToggled){
+                                keywords = document.getElementById('keywords').value
+                                if(keywords.length >0){
+                                keywords = keywords.toLowerCase()
+                                keywords = keywords.split(",")
+
+                                for(var i = 0; i <keywords.length; i++)
+                                {
+                                    if (d.title.toLowerCase().indexOf(keywords[i].trim()) != -1){
+                                        togglescore = togglescore+1;
+                                    }
+                                }}
+                            }
+
                             //doesn't go away with day toggle, but that's ok, should
                             //always show something that has been added to the itinerary
                             if(d.isToggled){
@@ -649,7 +831,7 @@ d3.json("sessions.json", function(error, thisdata){
                     )
 
             .on("mouseout",function(d, i){
-                    //recolor, but don't effect the toggle state
+                    //recolor, but do not effect the toggle state
                     if(d.isToggled){
                         d3.select(this).attr("fill", color)
                         ;}
@@ -1077,7 +1259,7 @@ d3.json("sessions.json", function(error, thisdata){
                     .style("font-size", "12pt")
                     .style("font-family", "Open Sans")
                     .style("margin", "10px 0px 20px 100px") //CSS style property, top, right, bottom,
-                    .html("@RebeccaWPerry</br>rperry@seas.harvard.edu</br>December 31, 2013");
+                    .html("@RebeccaWPerry</br>rperry@seas.harvard.edu</br>last updated January 9, 2014");
 
     })//end json load
         </script>
