@@ -4,7 +4,7 @@
 
         <meta charset="utf-8">
         <title>Conference Schedule</title>
-        <script type="text/javascript" src="d3/d3.v3.js"></script>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
         <link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Open+Sans:400,700' rel='stylesheet' type='text/css'>
 
         <style>
@@ -23,6 +23,16 @@
         </style>
 
         <script>
+          function clearIfEmpty() {
+            if(document.getElementById('keywords').value == "your, comma, separated, keywords") {
+                document.getElementById('keywords').value = "";
+            }
+          }
+          function resetIfEmpty() {
+            if(document.getElementById('keywords').value == "") {
+                document.getElementById('keywords').value = "your, comma, separated, keywords";
+            }
+          }
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
           m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -40,7 +50,7 @@
     </head>
 
 
-        
+
     <body>
 
         <div id="viz"></div>
@@ -196,7 +206,7 @@ d3.json("sessions.json", function(error, thisdata){
         dataset2[0][1] = "Option 1"
         dataset2[0][2] = "Option 2"
         dataset2[0][3] = "Option 3"
-        
+
         //calendar grid box width and height
         var bw = 20;
         var bh = 20;
@@ -258,7 +268,7 @@ d3.json("sessions.json", function(error, thisdata){
                //revise colors of calendar squares
                d3.selectAll(".calendarsquares").attr("fill", function(d){
 
-                    togglescore = 0 
+                    togglescore = 0
                     daysindex = simpledays.indexOf(d.day)
 
                     //get the kind index (e.g. focus)
@@ -272,7 +282,7 @@ d3.json("sessions.json", function(error, thisdata){
                     //get the sponsor indices of each calendar square
                     eachsponsor = (d.sponsor).split(" ")
 
-                    for(var j = 0, len = eachsponsor.length; j< eachsponsor.length;j++)                        
+                    for(var j = 0, len = eachsponsor.length; j< eachsponsor.length;j++)
                         {
                         sponsorindex = -1 //set to -1 as warning flag
                         for(var i = 0, len = sponsors.length; i< len; i++) {
@@ -325,7 +335,7 @@ d3.json("sessions.json", function(error, thisdata){
         // Legend
         ////////////////////////
 
-        var numpercol = 11; 
+        var numpercol = 11;
         var colspacing = 480;
 
         //COLOR BLOCKS FOR SPONSORS
@@ -387,7 +397,7 @@ d3.json("sessions.json", function(error, thisdata){
                    //color squares in calendar grid
                    d3.selectAll(".calendarsquares").attr("fill", function(d){
 
-                        togglescore = 0 
+                        togglescore = 0
                         hoverscore = 0
 
                         daysindex = simpledays.indexOf(d.day)
@@ -404,8 +414,8 @@ d3.json("sessions.json", function(error, thisdata){
                         //get the sponsor indices of each calendar square
                         eachsponsor = (d.sponsor).split(" ")
 
-                        for(var j = 0, len = eachsponsor.length; j< eachsponsor.length;j++)                        
-                            {                
+                        for(var j = 0, len = eachsponsor.length; j< eachsponsor.length;j++)
+                            {
                             sponsorindex = -1 //set to -1 as warning flag
                             for(var i = 0, len = sponsors.length; i< len; i++) {
                                 if (sponsors[i].s == eachsponsor[j]) {
@@ -414,7 +424,7 @@ d3.json("sessions.json", function(error, thisdata){
                                 }
                             if (sponsors[sponsorindex].isToggled){togglescore = togglescore +1;}
                             if (sponsors[sponsorindex].s == thissponsor){
-                                
+
                                 hoverscore = hoverscore +1;}
 
                             }
@@ -458,7 +468,7 @@ d3.json("sessions.json", function(error, thisdata){
                             if (days[daysindex].isToggled){
                                     if (hoverscore>0){
                                         return hovercolor}
-                                    else if (togglescore>0){ 
+                                    else if (togglescore>0){
                                         return color;
                                         }
                                     else{ // if either the day or the sponsor are untoggled
@@ -521,17 +531,17 @@ d3.json("sessions.json", function(error, thisdata){
                     return i%numpercol*25-5;
                     })
                 .append("xhtml:body")
-                .html("<input name='keywords' style='margin: 0; font-size: 18px; padding-top: 2px' type='text' size='28' value='your, comma, separated, keywords' id='keywords'/>");
+                .html("<input name='keywords' style='margin: 0; font-size: 18px; padding-top: 2px' type='text' size='28' value='your, comma, separated, keywords' id='keywords' onclick='clearIfEmpty()' onblur='resetIfEmpty()'/>");
 
 
 
-            //hover rectangle behind text enter 
+            //hover rectangle behind text enter
             svg.append("rect")
                 .attr("class", "hoverrect")
                 .attr("fill", "white")
                 .attr("width", bw*12)
-                .attr("opacity",0.0) 
-                .attr("fill-opacity",0.0) 
+                .attr("opacity",0.0)
+                .attr("fill-opacity",0.0)
                 .attr("height", bh*10)
                 .attr("x", function(){(i = sponsors.length)
                     return (d3.round(i/numpercol-.5,0)*colspacing+135);
@@ -584,7 +594,7 @@ d3.json("sessions.json", function(error, thisdata){
                         return tooltip.style("visibility", "hidden");})
 
                 .on("click", function(){
-                    for(var i = 0, len = sponsors.length; i< len; i++) 
+                    for(var i = 0, len = sponsors.length; i< len; i++)
                         {
                         sponsors[i].isToggled = false
                         }
@@ -641,7 +651,7 @@ d3.json("sessions.json", function(error, thisdata){
                         //color matching square
                         d3.selectAll(".unselecttext").attr("fill", "black")
                         return tooltip.style("visibility", "hidden");})
-                        
+
                 .on("click", function(){
 
                     for(var i = 0, len = sponsors.length; i< len; i++) {
@@ -767,7 +777,7 @@ d3.json("sessions.json", function(error, thisdata){
                     //calendar squares
                    d3.selectAll(".calendarsquares").attr("fill", function(d){
 
-                        togglescore = 0 
+                        togglescore = 0
                         hoverscore = 0
 
                         daysindex = simpledays.indexOf(d.day)
@@ -784,11 +794,11 @@ d3.json("sessions.json", function(error, thisdata){
                         //get the sponsor indices of each calendar square
                         eachsponsor = (d.sponsor).split(" ")
 
-                        for(var j = 0, len = eachsponsor.length; j< eachsponsor.length;j++)                        
+                        for(var j = 0, len = eachsponsor.length; j< eachsponsor.length;j++)
                             {
                             sponsorindex = -1 //set to -1 as warning flag
                             for(var i = 0, len = sponsors.length; i< len; i++) {
-                                //console.log(sponsors[i].s) 
+                                //console.log(sponsors[i].s)
                                 if (sponsors[i].s == eachsponsor[j]) {
                                       sponsorindex = i
                                           break;}
@@ -821,7 +831,7 @@ d3.json("sessions.json", function(error, thisdata){
                             if (days[daysindex].isToggled){
                                     if (hoverscore==1){
                                         return hovercolor}
-                                    else if (togglescore>0){ 
+                                    else if (togglescore>0){
                                         return color;
                                         }
                                     else{ // if either the day or the sponsor are untoggled
@@ -947,7 +957,7 @@ d3.json("sessions.json", function(error, thisdata){
                                 if (dataset[i].time == 2) {timeindex = 2}
 
                                 daysindex = simpledays.indexOf(dataset[i].day)
-                                timeslotcounter[daysindex*3+timeindex] = 
+                                timeslotcounter[daysindex*3+timeindex] =
                                     timeslotcounter[daysindex*3+timeindex]+1
 
                                 //if there are 3 or fewer sessions selected for timeslot
@@ -990,7 +1000,7 @@ d3.json("sessions.json", function(error, thisdata){
                                 if (dataset[i].time == 2) {timeindex = 2}
 
                                 daysindex = simpledays.indexOf(dataset[i].day)
-                                timeslotcounter[daysindex*3+timeindex] = 
+                                timeslotcounter[daysindex*3+timeindex] =
                                     timeslotcounter[daysindex*3+timeindex]+1
 
                                 //if there are 3 or fewer sessions selected for timeslot
