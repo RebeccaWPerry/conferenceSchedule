@@ -227,15 +227,16 @@ d3.json("sessions.json", function(error, thisdata){
         //width and height of canvas
         var w = 1600 - margin.left - margin.right,
             h = r1+400 - margin.top - margin.bottom;
-
+            w2 = 1600
+            h2 = r1+400
 
         //////////////////////////
         // Begin SVG
         //////////////////////////
 
         var svg = d3.select("body").append("svg")
-            .attr("width", w + margin.left + margin.right)
-            .attr("height", h + margin.top + margin.bottom)
+            .attr("viewBox","0,0,"+w2+","+h2)
+            .attr("preserveAspectRation", "xMidYMid meet")
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
