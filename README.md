@@ -1,7 +1,7 @@
 conferenceSchedule
 ==================
 
-Open source D3 solution for creating your personal itinerary at a megaconference. Current working version hosted here: wwww.marchmeetingcalendar.com
+Open source D3 solution for creating your personal itinerary at a megaconference. Current working version hosted here: www.marchmeetingcalendar.com
 
 I am interested to hear if you adapt this project for another use. Please be in touch!
 
